@@ -4,6 +4,8 @@ cluster:
   server: https://kubernetes.default.svc
   project: 1102062e
   gitopsAgentId: devcluster01
+
+# true  -> enable this app for this cluster (even if not in environmentApps)
+# false -> disable this app for this cluster (even if environmentApps enables it)
 clusterApps:
-  additional:
-    - hello-world
+  hello-world: true

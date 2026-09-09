@@ -16,7 +16,7 @@ spec:
   # no changes needed here.
   generators:
     - git:
-        repoURL: https://github.com/msnops/multi-cluster-multi-apps-poc.git
+        repoURL: https://github.com/msnops/argocd-root-application.git
         revision: main
         files:
           - path: "eks_new/clusters/*/cluster_values.yaml"
@@ -32,7 +32,7 @@ spec:
 
       sources:
         # The applicationsets chart itself
-        - repoURL: https://github.com/msnops/multi-cluster-multi-apps-poc.git
+        - repoURL: https://github.com/msnops/argocd-root-application.git
           targetRevision: main
           path: eks_new/applicationsets
 
@@ -53,12 +53,12 @@ spec:
               - name: gitopsNamespace
                 value: argocd
               - name: repoURL
-                value: https://github.com/msnops/multi-cluster-multi-apps-poc.git
+                value: https://github.com/msnops/argocd-root-application.git
               - name: targetRevision
                 value: main
 
         # Values repository (so $values/... refs above resolve)
-        - repoURL: https://github.com/msnops/multi-cluster-multi-apps-poc.git
+        - repoURL: https://github.com/msnops/argocd-root-application.git
           targetRevision: main
           ref: values
 

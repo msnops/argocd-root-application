@@ -1,0 +1,37 @@
+clusterName: ""
+gitopsAgentId: ""
+gitopsNamespace: argocd
+repoURL: ""
+targetRevision: main
+
+applicationSet:
+  requeueAfterSeconds: 60
+  preserveResourcesOnDeletion: false
+
+  # Progressive Syncs: apps are created/synced one step at a time, in this
+  # exact order. ArgoCD waits for each app to be Synced + Healthy before
+  # moving to the next. Apps not enabled for a given cluster are simply
+  # skipped in the sequence - safe to list every app-catalog app here once,
+  # globally, and reuse this same order across all environments/clusters.
+  progressiveSync:
+    enabled: true
+    order:
+      - namespaces
+      - vault-secrets-operator
+      - platform-secrets
+      - storageclass
+      - cluster-autoscaler
+      - aws-load-balancer-controller
+      - nginx-ingress
+      - nginx-targetgroupbinding
+      - hello-world
+
+# Baseline apps enabled for every cluster in this environment.
+# Simple enable list - set at the environment level (environments/<env>/values.yaml).
+environmentApps: []
+
+# Per-cluster overrides, set at the cluster level (clusters/<cluster>/cluster_values.yaml).
+# true  -> force-enable this app for this cluster, even if not in environmentApps
+# false -> force-disable this app for this cluster, even if environmentApps enables it
+# Apps not listed here simply inherit the environment's setting.
+clusterApps: {}

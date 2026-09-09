@@ -1,0 +1,11 @@
+cluster:
+  name: uatcluster01
+  environment: dev
+  server: https://kubernetes.default.svc
+  project: 1d7264c7
+  gitopsAgentId: uatcluster01
+
+# true  -> enable this app for this cluster (even if not in environmentApps)
+# false -> disable this app for this cluster (even if environmentApps enables it)
+clusterApps:
+  hello-world: true

@@ -1,0 +1,77 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  name: gitops-agent-devcluster01
+  namespace: argocd
+
+  labels:
+    gitops.harness.io/cluster: "devcluster01"
+    gitops.harness.io/environment: "dev"
+    gitops.harness.io/gitops-agent-id: "devcluster01"
+
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: "1d7264c7"
+
+  sources:
+    #
+    # Layer 2: the applicationsets chart. This ApplicationSet reads this
+    # same cluster's cluster_values.yaml (merged over the environment
+    # defaults) and fans out into the per-app Applications from Layer 3.
+    #
+    - repoURL: "https://github.com/msnops/argocd-root-application.git"
+      targetRevision: "main"
+      path: "eks_new/applicationsets"
+
+      helm:
+        releaseName: gitops-agent-devcluster01
+
+        valueFiles:
+          - '$values/eks_new/environments/dev/values.yaml'
+          - '$values/eks_new/clusters/devcluster01/cluster_values.yaml'
+
+        parameters:
+          - name: clusterName
+            value: "devcluster01"
+          - name: gitopsAgentId
+            value: "devcluster01"
+          - name: gitopsNamespace
+            value: "argocd"
+          - name: repoURL
+            value: "https://github.com/msnops/argocd-root-application.git"
+          - name: targetRevision
+            value: "main"
+          - name: applicationSet.requeueAfterSeconds
+            value: "60"
+
+    #
+    # Values repository (so $values/... refs above resolve)
+    #
+    - repoURL: "https://github.com/msnops/argocd-root-application.git"
+      targetRevision: "main"
+      ref: values
+
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: argocd
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true

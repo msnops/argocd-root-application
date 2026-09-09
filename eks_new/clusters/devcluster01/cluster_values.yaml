@@ -1,0 +1,9 @@
+cluster:
+  name: devcluster01
+  environment: dev
+  server: https://kubernetes.default.svc
+  project: 1102062e
+  gitopsAgentId: devcluster01
+clusterApps:
+  additional:
+    - hello-world

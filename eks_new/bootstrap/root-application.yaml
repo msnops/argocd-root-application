@@ -18,8 +18,8 @@ spec:
     - git:
         repoURL: https://github.com/msnops/argocd-root-application.git
         revision: main
-        files:
-          - path: "eks_new/clusters/**/cluster_values.yaml"
+        directories:
+          - path: "eks_new/clusters/*"
 
   template:
     metadata:

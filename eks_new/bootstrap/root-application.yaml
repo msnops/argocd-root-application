@@ -18,12 +18,12 @@ spec:
     - git:
         repoURL: https://github.com/msnops/argocd-root-application.git
         revision: main
-        directories:
-          - path: "eks_new/clusters/*"
+        files:
+          - path: "eks_new/clusters/*/cluster_values.yaml"
 
   template:
     metadata:
-      name: 'gitops-agent-{{ .cluster.gitopsAgentId | lower | replace "_" "-" }}'
+      name: 'gitops-agent-{{ .path.basename }}'
       finalizers:
         - resources-finalizer.argocd.argoproj.io
 

@@ -1,0 +1,2 @@
+# argocd-root-application
+argocd

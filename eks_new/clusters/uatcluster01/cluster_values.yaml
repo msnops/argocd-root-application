@@ -9,3 +9,4 @@ cluster:
 # false -> disable this app for this cluster (even if environmentApps enables it)
 clusterApps:
   hello-world: true
+  platform-secrets: true
